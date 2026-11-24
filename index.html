@@ -191,11 +191,11 @@ h1 .hl{color:var(--orange)}
 
 /* interrupteur sombre / clair */
 .mode{display:flex;align-items:center;padding:0;border:0;background:none;backdrop-filter:none;-webkit-backdrop-filter:none}
-.seg{display:inline-flex;gap:2px;padding:2px;border:1px solid var(--line2);border-radius:99px;background:color-mix(in srgb,var(--void) 70%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.seg button{all:unset;cursor:pointer;width:26px;height:24px;display:inline-flex;align-items:center;justify-content:center;border-radius:99px;font-size:13px;line-height:1;color:var(--faint);transition:background .25s,color .25s}
-.seg button:hover{color:var(--text)}
-.seg button[aria-checked="true"]{background:var(--text);color:var(--void)}
-.seg button:focus-visible{outline:2px solid var(--champagne);outline-offset:2px}
+.tmode{display:inline-flex;gap:2px;padding:2px;border:1px solid var(--line2);border-radius:99px;background:color-mix(in srgb,var(--void) 70%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.tmode button{all:unset;cursor:pointer;width:26px;height:24px;display:inline-flex;align-items:center;justify-content:center;border-radius:99px;font-size:13px;line-height:1;color:var(--faint);transition:background .25s,color .25s}
+.tmode button:hover{color:var(--text)}
+.tmode button[aria-checked="true"]{background:var(--text);color:var(--void)}
+.tmode button:focus-visible{outline:2px solid var(--champagne);outline-offset:2px}
 
 /* les trois cartes partagent les mêmes lignes : étiquette, titre, texte, lien */
 .split{grid-template-rows:auto auto 1fr auto;row-gap:0}
@@ -212,7 +212,7 @@ h1 .hl{color:var(--orange)}
 
 <main class="hero">
   <div class="top">
-    <div class="mode"><div class="seg" role="radiogroup" aria-label="Color theme"><button role="radio" data-v="light" title="Light" aria-label="Light">☀</button><button role="radio" data-v="auto" title="System" aria-label="System">◐</button><button role="radio" data-v="dark" title="Dark" aria-label="Dark">☾</button></div></div>
+    <div class="mode"><div class="tmode" role="radiogroup" aria-label="Color theme"><button role="radio" data-v="light" title="Light" aria-label="Light">☀</button><button role="radio" data-v="auto" title="System" aria-label="System">◐</button><button role="radio" data-v="dark" title="Dark" aria-label="Dark">☾</button></div></div>
   </div>
 
   <div class="mid">
@@ -264,7 +264,7 @@ h1 .hl{color:var(--orange)}
 </div>
 
 <script>(function(){
- var d=document.documentElement,K="cc-theme",q=matchMedia("(prefers-color-scheme: dark)"),bs=document.querySelectorAll(".seg button"),cur="auto";
+ var d=document.documentElement,K="cc-theme",q=matchMedia("(prefers-color-scheme: dark)"),bs=document.querySelectorAll(".tmode button"),cur="auto";
  try{var s=localStorage.getItem(K);if(s==="light"||s==="dark")cur=s;}catch(e){}
  function apply(){var m=cur==="auto"?(q.matches?"dark":"light"):cur;d.setAttribute("data-mode",m);d.setAttribute("data-theme",m);bs.forEach(function(b){b.setAttribute("aria-checked",String(b.dataset.v===cur));});}
  bs.forEach(function(b){b.onclick=function(){cur=b.dataset.v;try{cur==="auto"?localStorage.removeItem(K):localStorage.setItem(K,cur);}catch(e){}apply();};});

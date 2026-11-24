@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reruns with modified context in AI agent incident investigations — Salah Chadli</title>
+<meta name="description" content="Master's thesis topic note: what a rerun of an AI agent from a modified context establishes, and which premises must be added to support claims about the incident.">
+<meta property="og:title" content="Reruns with modified context in AI agent incident investigations — Salah Chadli">
+<meta property="og:description" content="Master's thesis topic note: what a rerun of an AI agent from a modified context establishes, and which premises must be added to support claims about the incident.">
+<meta property="og:type" content="article">
+<meta name="color-scheme" content="dark light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3CradialGradient id='g' cx='.34' cy='.3' r='.8'%3E%3Cstop offset='0' stop-color='%23FBE0AE'/%3E%3Cstop offset='.5' stop-color='%23E8A857'/%3E%3Cstop offset='1' stop-color='%237e551f'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='%230B0912'/%3E%3Ccircle cx='32' cy='32' r='17' fill='url(%23g)'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400..500&family=Jost:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>(function(){var d=document.documentElement,p=null;try{p=localStorage.getItem("cc-mode")}catch(e){}if(p!=="light")p="dark";d.setAttribute("data-mode",p);d.setAttribute("data-theme",p);})();</script>
+<style>
+
+:root{--void:#0B0912;--void2:#171320;--text:#F1EADD;--text2:#EDE6D8;--soft:#B9AEC4;--faint:#7E7690;--line:rgba(241,234,221,.14);--line2:rgba(241,234,221,.30);
+--champagne:#E1C48C;--orange:#F2681E;--magenta:#EC4C8C;--warmtag:#F7A16A;--cooltag:#F187B4;
+--display:'Newsreader',Georgia,'Times New Roman',serif;--sans:'Jost','Avenir Next',Avenir,'Segoe UI',sans-serif;--mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+--ease:cubic-bezier(.2,.7,.2,1);--pad:clamp(22px,6vw,84px);--max:1240px;
+--bgglow:radial-gradient(1100px 780px at 100% -10%,rgba(225,196,140,.20),transparent 58%),radial-gradient(140% 120% at 50% 0%,#0E0A16,var(--void) 60%);
+--colwarm:radial-gradient(520px 360px at 15% -10%,rgba(242,104,30,.28),transparent 62%),var(--void2);
+--colcool:radial-gradient(520px 360px at 90% 115%,rgba(236,76,140,.24),transparent 62%),var(--void2);
+--stars:radial-gradient(1.4px 1.4px at 8% 18%,rgba(255,255,255,.85),transparent),radial-gradient(1.2px 1.2px at 22% 62%,rgba(255,255,255,.55),transparent),radial-gradient(1px 1px at 34% 30%,rgba(255,255,255,.65),transparent),radial-gradient(1.3px 1.3px at 47% 78%,rgba(255,255,255,.5),transparent),radial-gradient(1px 1px at 58% 22%,rgba(255,255,255,.7),transparent),radial-gradient(1.5px 1.5px at 66% 54%,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 74% 84%,rgba(255,255,255,.45),transparent),radial-gradient(1.2px 1.2px at 82% 38%,rgba(255,255,255,.7),transparent),radial-gradient(1px 1px at 90% 68%,rgba(255,255,255,.5),transparent),radial-gradient(1.4px 1.4px at 15% 88%,rgba(255,255,255,.55),transparent),radial-gradient(1px 1px at 40% 12%,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 95% 14%,rgba(255,255,255,.55),transparent),radial-gradient(1px 1px at 5% 46%,rgba(255,255,255,.45),transparent),radial-gradient(1.2px 1.2px at 52% 48%,rgba(255,255,255,.5),transparent)}
+:root[data-mode="light"]{--void:#FFFCF7;--void2:#FFFFFF;--text:#15111C;--text2:#2A2433;--soft:#4A4256;--faint:#7A7187;--line:rgba(21,17,28,.10);--line2:rgba(21,17,28,.22);
+--champagne:#9C7633;--orange:#C9500F;--magenta:#C2306D;--warmtag:#B4500F;--cooltag:#B02A63;color-scheme:light;
+--bgglow:radial-gradient(1100px 780px at 100% -10%,rgba(232,168,87,.30),transparent 58%),radial-gradient(60% 50% at 0% 100%,rgba(192,139,214,.12),transparent 65%),linear-gradient(180deg,#FFFDF9,#F6EFE3);
+--colwarm:radial-gradient(520px 360px at 15% -10%,rgba(242,104,30,.16),transparent 62%),#FFFFFF;
+--colcool:radial-gradient(520px 360px at 90% 115%,rgba(236,76,140,.13),transparent 62%),#FFFFFF;
+--stars:radial-gradient(1.4px 1.4px at 8% 18%,rgba(156,118,51,.55),transparent),radial-gradient(1.2px 1.2px at 22% 62%,rgba(21,17,28,.22),transparent),radial-gradient(1px 1px at 34% 30%,rgba(156,118,51,.45),transparent),radial-gradient(1.3px 1.3px at 47% 78%,rgba(21,17,28,.2),transparent),radial-gradient(1px 1px at 58% 22%,rgba(156,118,51,.5),transparent),radial-gradient(1.5px 1.5px at 66% 54%,rgba(21,17,28,.18),transparent),radial-gradient(1.2px 1.2px at 82% 38%,rgba(156,118,51,.45),transparent),radial-gradient(1px 1px at 95% 14%,rgba(21,17,28,.2),transparent)}
+
+:root{--accent:var(--magenta)}
+.orb{position:absolute;border-radius:50%;box-shadow:inset -18px -22px 60px rgba(0,0,0,.55)}
+.orb::after{content:"";position:absolute;inset:0;border-radius:50%;box-shadow:inset 22px 20px 50px rgba(255,255,255,.14)}
+.glow{filter:drop-shadow(0 0 42px rgba(255,255,255,.10))}
+.o-amber{background:radial-gradient(circle at 34% 30%,#FBE0AE,#E8A857 46%,#7e551f 82%)}
+.o-magenta{background:radial-gradient(circle at 34% 30%,#FBA8CE,#EC4C8C 46%,#7c1d45 82%)}
+.o-orange{background:radial-gradient(circle at 34% 30%,#FFC58A,#F2681E 46%,#7d2c07 82%)}
+.o-green{background:radial-gradient(circle at 34% 30%,#C8F09A,#8CCB55 42%,#3C6B24 78%,#1d3512)}
+.o-blue{background:radial-gradient(circle at 34% 30%,#BCDAF4,#5F94D0 46%,#23446e 82%)}
+.o-violet{background:radial-gradient(circle at 34% 30%,#ECCBF6,#C08BD6 46%,#5b3670 82%)}
+.ring{position:absolute;left:50%;top:50%;width:180%;height:46%;transform:translate(-50%,-50%) rotate(-24deg);border:2px solid rgba(240,230,210,.55);border-radius:50%;box-shadow:0 0 14px rgba(240,230,210,.25)}
+:root[data-mode="light"] .orb{box-shadow:inset -14px -18px 46px rgba(60,30,10,.26),0 26px 44px -22px rgba(90,50,20,.45)}
+:root[data-mode="light"] .orb::after{box-shadow:inset 18px 16px 40px rgba(255,255,255,.32)}
+:root[data-mode="light"] .ring{border-color:rgba(21,17,28,.3);box-shadow:none}
+
+:root{--proj:#8DB4E2}
+:root[data-mode="light"]{--proj:#2F64A3}
+*{box-sizing:border-box}
+html{background:var(--void);scroll-behavior:smooth;scrollbar-color:color-mix(in srgb,var(--champagne) 45%,transparent) transparent}
+body{margin:0;font:400 18px/1.72 var(--sans);color:var(--text2);-webkit-font-smoothing:antialiased;overflow-x:clip;transition:background-color .4s}
+::selection{background:color-mix(in srgb,var(--champagne) 38%,transparent)}
+a{color:inherit;text-decoration:none}
+a:focus-visible,button:focus-visible,label:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+h1,h2,h3{text-wrap:balance}p,li{text-wrap:pretty}
+b,strong{font-weight:500;color:var(--text)}
+em,i{font-style:italic}
+.page{position:relative;isolation:isolate;overflow:clip;min-height:100svh}
+/* lumière colorée en haut (comme les slides) et ciel étoilé fixe */
+.page::before{content:"";position:absolute;left:0;right:0;top:0;height:min(1100px,100%);z-index:-1;pointer-events:none;
+ background:radial-gradient(1100px 780px at var(--glow-x,50%) var(--glow-y,-20%),color-mix(in srgb,var(--accent) 26%,transparent),transparent 58%),
+ radial-gradient(700px 520px at 100% 8%,color-mix(in srgb,var(--accent) 10%,transparent),transparent 62%)}
+:root[data-mode="light"] .page::before{background:radial-gradient(1100px 780px at var(--glow-x,50%) var(--glow-y,-20%),color-mix(in srgb,var(--accent) 16%,transparent),transparent 58%),radial-gradient(700px 520px at 100% 8%,color-mix(in srgb,var(--accent) 7%,transparent),transparent 62%)}
+body::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:var(--stars);background-size:920px 760px}
+.sky2{position:fixed;inset:0;z-index:-2;pointer-events:none;background:var(--stars);background-size:1370px 1130px;background-position:310px 190px;opacity:.6}
+body{background:var(--bgglow);background-color:var(--void)}
+
+/* ---------- grid : table of contents | text | margin notes ---------- */
+.shell{display:grid;grid-template-columns:[toc] 190px [text] minmax(0,680px) [notes] 250px;column-gap:56px;justify-content:center;padding:0 clamp(20px,5vw,64px)}
+.top{grid-column:1 / -1;grid-row:1;display:flex;justify-content:space-between;align-items:center;padding:30px 0 0}
+.back{font:500 12px/1 var(--sans);letter-spacing:.28em;text-transform:uppercase;color:var(--faint);transition:color .25s}
+.back:hover{color:var(--text)}
+.back span{display:inline-block;transition:translate .35s var(--ease)}
+.back:hover span{translate:-4px 0}
+.hero{grid-column:text / -1;grid-row:2;padding:clamp(56px,11vh,120px) 0 clamp(36px,6vh,64px)}
+.kick{display:flex;align-items:center;gap:12px;font:400 12px/1.5 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin:0 0 22px}
+.kick::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);flex:none}
+h1{font:400 clamp(36px,4.6vw,62px)/1.06 var(--display);}
+h1.long{font-size:clamp(30px,3.4vw,48px);max-width:26ch}
+h1{color:var(--text);margin:0 0 18px;max-width:20ch;letter-spacing:0}
+.subtitle{font:300 clamp(19px,1.7vw,23px)/1.45 var(--sans);color:var(--soft);margin:0 0 26px;max-width:46ch}
+.meta{font:400 12.5px/1.7 var(--mono);color:var(--faint);margin:0 0 28px}
+.actions{display:flex;flex-wrap:wrap;gap:12px 28px}
+.actions a{font:400 12px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--text2);position:relative;padding-bottom:7px}
+.actions a::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:var(--accent);transform:scaleX(.25);transform-origin:0 50%;transition:transform .5s var(--ease)}
+.actions a:hover::after{transform:scaleX(1)}
+.actions a i{font-style:normal;color:var(--accent);margin-left:6px}
+
+.toc{grid-column:toc;grid-row:4;align-self:start;position:sticky;top:36px;padding-top:6px}
+.toc-home{display:inline-flex;gap:8px;margin:0 0 30px;font:500 12px/1 var(--sans);letter-spacing:.24em;text-transform:uppercase;color:var(--soft);transition:color .25s}
+.toc-home:hover{color:var(--text)}
+.toc-home span{transition:translate .35s var(--ease)}.toc-home:hover span{translate:-4px 0}
+.home-fab{position:fixed;left:18px;bottom:18px;z-index:20;display:none;align-items:center;gap:8px;height:30px;padding:0 14px;border:1px solid var(--line2);border-radius:99px;background:color-mix(in srgb,var(--void) 75%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font:500 11.5px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--text2);opacity:0;translate:0 8px;transition:opacity .3s,translate .3s var(--ease),border-color .25s}
+.home-fab:hover{border-color:var(--accent)}
+.home-fab.show{opacity:1;translate:0 0}
+.toc p{font:500 11px/1 var(--sans);letter-spacing:.3em;text-transform:uppercase;color:var(--faint);margin:0 0 14px}
+.toc ol{list-style:none;margin:0;padding:0;border-left:1px solid var(--line)}
+.toc a{display:block;padding:6px 0 6px 16px;margin-left:-1px;border-left:1px solid transparent;font-size:13.5px;line-height:1.35;color:var(--faint);transition:color .25s,border-color .25s}
+.toc a:hover{color:var(--text)}
+.toc a.on{color:var(--text);border-left-color:var(--accent)}
+.toc a span{font:400 11px/1 var(--mono);color:var(--accent);margin-right:8px}
+
+article{grid-column:text;grid-row:4;min-width:0;padding-bottom:120px}
+article>section{padding-top:34px}
+article>section+section{margin-top:30px;border-top:1px solid var(--line)}
+h2{display:flex;align-items:baseline;gap:16px;font:400 clamp(27px,2.6vw,36px)/1.15 var(--display);color:var(--text);margin:0 0 22px}
+h2 .n{font:400 .62em/1 var(--display);color:var(--accent);flex:none;min-width:1.6em}
+h3{font:400 clamp(21px,1.8vw,25px)/1.25 var(--display);color:var(--text);margin:38px 0 12px}
+article p{margin:0 0 20px}
+article ul,article ol{margin:0 0 22px;padding-left:22px}
+article li{margin:0 0 10px}
+article li::marker{color:var(--accent)}
+.lead{font:300 clamp(19px,1.6vw,22px)/1.6 var(--sans);color:var(--text)}
+.pull{font:400 clamp(23px,2.2vw,29px)/1.32 var(--display);color:var(--text);border-left:2px solid var(--accent);padding-left:24px;margin:30px 0}
+.def{display:grid;grid-template-columns:150px minmax(0,1fr);gap:4px 24px;margin:0 0 26px}
+.def dt{font:400 12px/1.9 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.def dd{margin:0 0 16px}
+.formula{font:400 15px/1.6 var(--mono);color:var(--text);text-align:center;padding:16px 10px;margin:0 0 22px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow-x:auto}
+.inline-link{color:var(--text);border-bottom:1px solid color-mix(in srgb,var(--accent) 55%,transparent);transition:border-color .25s}
+.inline-link:hover{border-color:var(--accent)}
+code{font:400 .86em/1 var(--mono);color:var(--text);background:color-mix(in srgb,var(--text) 8%,transparent);padding:2px 5px;border-radius:3px}
+
+/* ---------- key numbers ---------- */
+.kpis{grid-column:text / -1;grid-row:3;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line2);border-bottom:1px solid var(--line);margin:0 0 clamp(48px,8vh,80px)}
+.kpi{padding:22px 20px 20px 0}
+.kpi+.kpi{padding-left:22px;border-left:1px solid var(--line)}
+.kpi b{display:block;font:400 clamp(30px,3.2vw,44px)/1 var(--display);color:var(--accent);font-weight:400;margin-bottom:10px;white-space:nowrap}
+.kpi span{font-size:14px;line-height:1.4;color:var(--soft);display:block}
+
+/* ---------- figures and tables ---------- */
+figure{margin:34px 0 34px}
+.wide{margin-right:-306px}
+figcaption{font-size:14px;line-height:1.55;color:var(--faint);margin-top:12px;max-width:72ch}
+figcaption b{color:var(--soft);font-weight:500}
+.plate{background:#FFFFFF;border-radius:6px;padding:clamp(8px,1.4vw,18px);box-shadow:0 0 0 1px var(--line)}
+.plate img{display:block;width:100%;height:auto}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:14.5px;line-height:1.4;font-variant-numeric:tabular-nums}
+th{font:400 11px/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);text-align:right;padding:0 12px 10px;border-bottom:1px solid var(--line2);vertical-align:bottom;white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:right;color:var(--text2);white-space:nowrap}
+th:first-child,td:first-child{text-align:left;padding-left:0}
+td:first-child{color:var(--text)}
+tr.grp th{text-align:center;border-bottom:0;padding-bottom:4px;color:var(--soft)}
+td.hl{color:var(--accent)}
+.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:22px;position:relative}
+.flow div{position:relative;border-top:1px solid var(--line2);padding-top:14px}
+.flow div::before{content:"";position:absolute;left:0;top:-4px;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.flow div:not(:last-child)::after{content:"→";position:absolute;right:-18px;top:-13px;font-size:14px;color:var(--accent)}
+.flow b{display:block;font:400 21px/1.15 var(--display);color:var(--text);font-weight:400;margin-bottom:6px}
+.flow span{font-size:13.5px;line-height:1.45;color:var(--soft);display:block}
+.flow-note{font:400 12.5px/1.6 var(--mono);color:var(--faint);margin-top:18px}
+
+.callout{border-left:2px solid var(--accent);padding:4px 0 4px 24px;margin:0 0 22px}
+.callout p:last-child{margin-bottom:0}
+.refs{list-style:none;padding:0;margin:0}
+.refs li{padding-left:24px;text-indent:-24px;margin:0 0 12px;font-size:15.5px;line-height:1.55;color:var(--soft)}
+.refs a{color:var(--text2);border-bottom:1px solid color-mix(in srgb,var(--accent) 45%,transparent)}
+.refs a:hover{border-color:var(--accent)}
+.refs li:target{color:var(--text)}
+.refgroup{font:500 11px/1 var(--sans);letter-spacing:.3em;text-transform:uppercase;color:var(--faint);margin:30px 0 14px}
+
+/* ---------- margin notes ---------- */
+.ref{font:500 .62em/1 var(--mono);color:var(--accent);vertical-align:super;cursor:pointer;padding:0 1px}
+.sn+.ref::before{content:",";color:var(--faint);margin-right:1px}
+.tog{display:none}
+.sn{float:right;clear:right;width:250px;margin:4px -306px 18px 0;font-size:13px;line-height:1.55;color:var(--faint);position:relative}
+.sn>b{font:500 11px/1 var(--mono);color:var(--accent);margin-right:6px}
+.sn a{color:var(--soft);border-bottom:1px solid var(--line2)}
+.sn a:hover{color:var(--text)}
+.sn q{quotes:"\201C" "\201D"}
+
+/* ---------- theme toggle and progress ---------- */
+.mode{position:fixed;right:18px;bottom:18px;z-index:20;display:flex;gap:2px;padding:3px;border:1px solid var(--line2);border-radius:99px;background:color-mix(in srgb,var(--void) 75%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+
+@media (max-width:1240px){
+ .shell{grid-template-columns:[text] minmax(0,680px) [notes] 250px}
+ .toc{display:none}
+ .home-fab{display:inline-flex}
+}
+@media (max-width:1020px){
+ .shell{grid-template-columns:[text] minmax(0,720px);justify-content:center}
+ .wide{margin-right:0}
+ .sn{display:none;float:none;width:auto;margin:12px 0 16px;padding:12px 16px;border-left:2px solid var(--accent);background:color-mix(in srgb,var(--text) 5%,transparent);font-size:14px}
+ .tog:checked+.sn{display:block}
+ .ref{padding:0 3px}
+ .kpis{grid-template-columns:repeat(2,1fr)}
+ .kpi:nth-child(3){padding-left:0;border-left:0}
+ .kpi:nth-child(n+3){border-top:1px solid var(--line)}
+ .flow{grid-template-columns:1fr;gap:14px}
+ .flow div:not(:last-child)::after{content:"↓";right:auto;left:18px;top:auto;bottom:-20px}
+}
+@media (max-width:560px){
+ body{font-size:17px}
+ .def{grid-template-columns:1fr}.def dd{margin-bottom:18px}
+ .kpi b{font-size:30px}
+ h2{gap:12px}
+}
+
+/* interrupteur sombre / clair */
+.mode{display:flex;align-items:center;padding:0;border:0;background:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+.switch{all:unset;cursor:pointer;position:relative;display:inline-flex;align-items:center;justify-content:space-between;width:62px;height:30px;padding:0 8px;box-sizing:border-box;border:1px solid var(--line2);border-radius:99px;background:color-mix(in srgb,var(--void) 70%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font-size:13px;line-height:1;color:var(--faint);transition:border-color .25s}
+.switch:hover{border-color:color-mix(in srgb,var(--text) 45%,transparent)}
+.switch:focus-visible{outline:2px solid var(--champagne);outline-offset:3px}
+.switch .ic{position:relative;z-index:1;width:14px;text-align:center;transition:color .3s}
+.switch .knob{position:absolute;top:3px;left:3px;width:28px;height:22px;border-radius:99px;background:var(--text);transition:translate .35s cubic-bezier(.2,.7,.2,1)}
+.switch[aria-checked="false"] .knob{translate:26px 0}
+.switch[aria-checked="true"] .ic.moon,.switch[aria-checked="false"] .ic.sun{color:var(--void)}
+
+@keyframes rise{from{opacity:0;transform:translateY(16px)}}
+@keyframes pop{from{opacity:0;scale:.86}}
+@keyframes tw{from{opacity:.3}to{opacity:.75}}
+@keyframes glow{from{opacity:.8}to{opacity:1}}
+@keyframes prog{from{transform:scaleX(0)}}
+@keyframes up{from{opacity:0;transform:translateY(24px)}}
+@media (prefers-reduced-motion:no-preference){
+ .hero>*{animation:rise .8s var(--ease) both}
+ .hero>:nth-child(2){animation-delay:.07s}.hero>:nth-child(3){animation-delay:.14s}.hero>:nth-child(4){animation-delay:.21s}.hero>:nth-child(5){animation-delay:.28s}
+ .kpis{animation:rise .8s var(--ease) .34s both}
+ .sky2{animation:tw 6s ease-in-out infinite alternate}
+ .page::before{animation:glow 9s ease-in-out infinite alternate}
+ @supports (animation-timeline:view()){
+  body::after{content:"";position:fixed;left:0;right:0;top:0;height:2px;z-index:30;transform-origin:0 50%;background:var(--accent);animation:prog linear both;animation-timeline:scroll(root)}
+  article figure,article .callout,article .scroll{animation:up linear both;animation-timeline:view();animation-range:entry 0% cover 22%}
+ }
+}
+@media print{*,*::before,*::after{animation:none!important}.mode,.toc,.sky2,.home-fab{display:none!important}.sn{display:block}.wide{margin-right:0}}
+
+.tnote{font-size:.9em;opacity:.8;max-width:62ch;margin-top:14px;font-style:italic}
+</style>
+
+<style>
+/* figure 1 : timeline */
+.tl{position:relative;height:190px;margin:8px 0 0}
+.tl-line{position:absolute;left:0;right:0;top:50%;height:1px;background:var(--line2)}
+.tl-line::after{content:"";position:absolute;right:-2px;top:-4px;border:4px solid transparent;border-left:7px solid var(--line2)}
+.ev{position:absolute;left:var(--x);top:50%;width:140px;translate:-50% 0;text-align:center}
+.ev i{position:absolute;left:50%;top:-5px;translate:-50% 0;width:10px;height:10px;border-radius:50%;border:1.5px solid var(--soft);background:var(--void)}
+.ev.key i{background:var(--accent);border-color:var(--accent);box-shadow:0 0 14px var(--accent)}
+.ev b{display:block;font:400 17px/1.2 var(--display);color:var(--text);font-weight:400}
+.ev span{display:block;font-size:13px;line-height:1.4;color:var(--faint)}
+.ev.t{translate:-50% calc(-100% - 16px)}
+.ev.t i{top:auto;bottom:-21px}
+.ev.b{padding-top:18px}
+.ev.key b{color:var(--accent)}
+/* figure 2 : two lanes */
+.lanes{display:grid;gap:10px}
+.lane-name{font:400 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0}
+.lane{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px}
+.lane li{position:relative;margin:0;padding:12px 14px;border:1px solid var(--line2);border-radius:6px;background:color-mix(in srgb,var(--text) 3%,transparent)}
+.lane li:not(:last-child)::after{content:"→";position:absolute;right:-17px;top:50%;translate:0 -50%;color:var(--accent);font-size:14px}
+.lane b{display:block;font-weight:500;font-size:14.5px;line-height:1.3;color:var(--text)}
+.lane span{display:block;font-size:12.5px;line-height:1.35;color:var(--faint)}
+.axis{position:relative;display:flex;justify-content:space-between;align-items:center;padding:18px 0;margin:0 0 0 8px;border-top:1px dashed transparent}
+.axis::before{content:"";position:absolute;left:8%;right:0;top:50%;height:2px;background:linear-gradient(90deg,var(--accent),var(--line2))}
+.axis .pt{position:relative;font:400 12px/1 var(--mono);color:var(--accent);background:var(--void);padding-right:10px;z-index:1}
+.axis .pt::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--accent);margin-right:8px;vertical-align:-1px}
+.axis .run{position:relative;font:400 12px/1 var(--mono);color:var(--faint);background:var(--void);padding-left:10px;z-index:1}
+:root[data-mode="light"] .axis .pt,:root[data-mode="light"] .axis .run{background:#FFFCF7}
+/* figure 3 : the five statements */
+.map{min-width:640px;display:grid;column-gap:16px;row-gap:10px;align-items:center;
+ grid-template-columns:96px minmax(0,1fr) 120px minmax(0,1fr);
+ grid-template-areas:". h1 . h2" ". give . ." ". s0 . ." "r1 b1 s1 b2" ". . . s2" ". . . b3" "r4 b4 b4 b4" ". s4 s4 s4" "r5 b5 b5 b5"}
+.m-h{text-align:center}.m-h b{display:block;font:400 17px/1.2 var(--display);color:var(--accent);font-weight:400}.m-h span{font-size:12.5px;color:var(--faint)}
+.m-give{text-align:center;font-size:13.5px;line-height:1.4;color:var(--soft);padding:10px;border-radius:6px;background:color-mix(in srgb,var(--accent) 12%,transparent)}
+.m-give b{color:var(--text);font-weight:500}
+.m-row b{display:block;font:400 16px/1.2 var(--display);color:var(--text);font-weight:400}.m-row span{font-size:12px;color:var(--faint)}
+.m-box{position:relative;font-size:14px;line-height:1.4;color:var(--text);padding:12px 14px 12px 40px;border:1px solid var(--line2);border-radius:6px}
+.m-box>i{position:absolute;left:12px;top:12px;width:19px;height:19px;border-radius:50%;background:var(--accent);color:var(--void);font:500 11px/19px var(--mono);font-style:normal;text-align:center}
+.m-box.dash{border-style:dashed;text-align:center}
+.m-step{text-align:center;font-size:12px;line-height:1.35;color:var(--faint)}
+.m-step em{display:inline-block;font:400 11.5px/1 var(--mono);font-style:normal;color:var(--soft);border:1px dashed var(--line2);border-radius:99px;padding:4px 9px;margin-bottom:5px}
+.m-step span{display:block;font-style:italic}
+.m-step.v{position:relative}
+.m-step.v::before{content:"↓";display:block;color:var(--accent);font-size:13px;margin-bottom:2px}
+.t4{margin:0 0 10px!important;text-align:center}
+.b4{display:grid;grid-template-columns:1fr 120px 1fr;gap:16px;align-items:center;text-align:center;border-top:1px solid var(--line);padding-top:10px}
+.b4 b{display:block;font-weight:500;color:var(--accent)}.b4 span{font-size:12.5px;color:var(--faint)}
+/* claims and statements */
+.claims{margin:0 0 26px}
+.claims-h{font:400 12px/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin:22px 0 10px!important}
+.claims-h span{text-transform:none;letter-spacing:0;color:var(--faint);margin-left:6px}
+blockquote{margin:0 0 14px;padding-left:20px;border-left:1px solid var(--line2);font:400 19px/1.45 var(--display);color:var(--text)}
+blockquote::before{content:"“"}blockquote::after{content:""}
+.statements{counter-reset:s;list-style:none;padding:0}
+.statements li{counter-increment:s;position:relative;padding:12px 0 12px 46px;margin:0;border-top:1px solid var(--line);color:var(--text)}
+.statements li:last-child{border-bottom:1px solid var(--line)}
+.statements li::before{content:counter(s);position:absolute;left:0;top:10px;width:26px;height:26px;border-radius:50%;border:1px solid var(--accent);color:var(--accent);font:400 12px/24px var(--mono);text-align:center}
+@media (max-width:1020px){
+ .tl{height:auto;display:grid;gap:14px;padding-left:22px;border-left:1px solid var(--line2)}
+ .tl-line{display:none}
+ .ev,.ev.t,.ev.b{position:relative;left:auto;top:auto;width:auto;translate:none;text-align:left;padding:0}
+ .ev i,.ev.t i{left:-27px;top:6px;bottom:auto;translate:none}
+ .lane{grid-template-columns:1fr 1fr}.lane li:nth-child(2)::after{content:none}
+}
+</style>
+</head>
+<body>
+<div class="page">
+<div class="sky2" aria-hidden="true"></div>
+<div class="shell">
+  <nav class="top" aria-label="Site"><a class="back" href="index.html"><span>←</span> Home</a></nav>
+  <header class="hero">
+    <p class="kick">Master’s thesis · Topic note · M2 Madelhis, Université de Lorraine</p>
+    <h1 class="long">An ontological and epistemological analysis of reruns with modified context in investigations of AI agent incidents</h1>
+    <p class="subtitle">What does a rerun establish, and which premises must be added to support claims about the incident?</p>
+    <p class="meta">Salah Chadli · 22 November 2026 · version 2</p>
+    <nav class="actions" aria-label="Links"><a href="chadli-thesis-note-fr.pdf">PDF, French (original)<i>↗</i></a></nav>
+    <p class="tnote">Translated from the French original with the help of an AI assistant. I wrote the original text myself; AI assistance on the original is described in the notes at the end. If the two versions differ, the French one is the reference.</p>
+  </header>
+
+  <nav class="toc" aria-label="Contents"><a class="toc-home" href="index.html"><span>←</span> Home</a><p>Contents</p><ol><li><a href="#start"><span>01</span>The starting point</a></li><li><a href="#interest"><span>02</span>What interests me</a></li><li><a href="#why"><span>03</span>Why this case</a></li><li><a href="#problem"><span>04</span>The problem</a></li><li><a href="#question"><span>05</span>The question</a></li><li><a href="#tools"><span>06</span>Tools and corpus</a></li><li><a href="#corpus"><span>—</span>Corpus</a></li><li><a href="#clarifications"><span>—</span>Clarifications</a></li></ol></nav>
+  <article>
+
+<section id="start">
+<h2><span class="n">01</span>The starting point</h2>
+<p>In July 2026, the AISI (UK AI Security Institute) was running a cybersecurity evaluation on AI agents. According to Anthropic, in 9 runs out of 43, the agent, based on Mythos 5, took unsanctioned actions that affected real people and organisations, unrelated to the exercise.<label class="ref" for="n1" tabindex="0">1</label><input type="checkbox" id="n1" class="tog"><span class="sn"><b>1</b><q>In nine of AISI’s 43 evaluation runs, Mythos 5 took unsanctioned actions (i.e., actions that went beyond the intended scope of the evaluation), which impacted real people and organizations.</q> <a href="https://www.anthropic.com/research/alignment-assessment-ukaisi#:~:text=In%20nine%20of%20AISI%E2%80%99s%2043,real%20people%20and%20organizations.">Anthropic 2026b</a>, introduction.</span></p>
+<p>Following this incident, two separate investigations, one by Anthropic, the other by the AISI, conducted in coordination,<label class="ref" for="n2" tabindex="0">2</label><input type="checkbox" id="n2" class="tog"><span class="sn"><b>2</b><q>We provided AISI with regular updates on the progress of our assessment, held joint research meetings, and, to assist them in their analysis, shared information not otherwise available to AISI, such as the outputs of our interpretability tooling.</q> <a href="https://www.anthropic.com/research/alignment-assessment-ukaisi#:~:text=We%20provided%20AISI%20with%20regular,of%20our%20interpretability%20tooling.">Anthropic 2026b</a>, introduction.</span><label class="ref" for="n3" tabindex="0">3</label><input type="checkbox" id="n3" class="tog"><span class="sn"><b>3</b><q>During this investigation we worked closely with Anthropic, with both groups sharing and discussing findings.</q> <a href="https://cdn.prod.website-files.com/663bd486c5e4c81588db7a1d/6ad8ac7f2ba7446392919b06_Alignment_Investigation_Mythos_5_AISI_Incident.pdf">UK AI Security Institute 2026b</a>, <i>Executive Summary</i>.</span> focused mainly on the same run.<label class="ref" for="n4" tabindex="0">4</label><input type="checkbox" id="n4" class="tog"><span class="sn"><b>4</b><q>Like AISI’s report, we concentrate on the transcript (the complete record of the model’s reasoning and actions) from a single evaluation run.</q> <a href="https://www.anthropic.com/research/alignment-assessment-ukaisi#:~:text=Like%20AISI%E2%80%99s%20report%2C%20we%20concentrate,a%20single%20evaluation%20run.">Anthropic 2026b</a>, introduction.</span> They were published on 23 October 2026 (figure 1). Anthropic’s report reuses some of the investigation methods that Anthropic had already employed on other incidents (9 September 2026 post).<label class="ref" for="n5" tabindex="0">5</label><input type="checkbox" id="n5" class="tog"><span class="sn"><b>5</b><q>Our alignment assessment draws on a subset of the techniques we described in our September 9 post, which we summarize briefly below.</q> <a href="https://www.anthropic.com/research/alignment-assessment-ukaisi#:~:text=Our%20alignment%20assessment%20draws%20on,we%20summarize%20briefly%20below.">Anthropic 2026b</a>, section <i>Methods</i>.</span></p>
+<figure><div class="tl">
+<div class="tl-line"></div>
+<div class="ev b" style="--x:11%"><i></i><b>Late July</b><span>incident at the AISI</span></div>
+<div class="ev t" style="--x:30%"><i></i><b>30 July</b><span>Anthropic: report on other incidents</span></div>
+<div class="ev b" style="--x:50%"><i></i><b>4 August</b><span>AISI: incident report</span></div>
+<div class="ev t key" style="--x:70%"><i></i><b>9 September</b><span>Anthropic: post, investigation methods</span></div>
+<div class="ev b key" style="--x:89%"><i></i><b>23 October</b><span>the two investigations (Anthropic, AISI)</span></div>
+</div><figcaption><b>Figure 1.</b> The texts in order (2026). The thesis deals with the two investigations of 23 October and the 9 September post.</figcaption></figure>
+</section>
+
+<section id="interest">
+<h2><span class="n">02</span>What interests me</h2>
+<p class="pull">My object of study is the investigation, not the incident.</p>
+<p>More precisely, one method of these investigations interests me: Anthropic calls it <i>Resampling edited transcripts</i>.<label class="ref" for="n6" tabindex="0">6</label><input type="checkbox" id="n6" class="tog"><span class="sn"><b>6</b><q>To test our hypotheses about what caused a given harmful action, we modified the model’s transcripts (for instance, to add hints that the model was interacting with real humans), then sampled the model on the modified transcript, and used an LLM grader to measure whether the model still took the action of concern.</q> <a href="https://www.anthropic.com/research/alignment-assessment-ukaisi#:~:text=To%20test%20our%20hypotheses%20about,the%20action%20of%20concern.">Anthropic 2026b</a>, section <i>Methods, Resampling edited transcripts</i>.</span> I will call it <i>rerun</i> here, for <i>rerun with modified context</i>. It consists in going back to a point in the agent’s original trajectory, making modifications to its context, then resampling the agent several times from that point and observing the outcomes, graded by an LLM, and their frequencies (figure 2). The AISI does not use this term, but relies on a similar method: at a chosen point in the trajectory, it has the incident transcript summarised with the procedure of the original evaluation (<i>compaction summary</i>), modifies this summary and restarts the agent, which resumes its task using this modified summary.<label class="ref" for="n7" tabindex="0">7</label><input type="checkbox" id="n7" class="tog"><span class="sn"><b>7</b><q>We modify the resulting compaction summary, varying the information contained in it, simulating the situation where the model would have observed that information prior to compaction when engaging with the task.</q> <a href="https://cdn.prod.website-files.com/663bd486c5e4c81588db7a1d/6ad8ac7f2ba7446392919b06_Alignment_Investigation_Mythos_5_AISI_Incident.pdf">UK AI Security Institute 2026b</a>, §2.1 <i>Methodology</i>.</span><label class="ref" for="n8" tabindex="0">8</label><input type="checkbox" id="n8" class="tog"><span class="sn"><b>8</b>Even the condition with no added clarification starts from an already corrected summary: <q>The native summary message produced by context compaction includes language such as “persona” and “sim”, misleadingly describing real people and aspects of the environment as simulated. For our experiments, we have edited those parts to be more neutral and accurate. This editing applies to all of our experiments, and further clarifications are implemented on this edited summary message.</q> <a href="https://cdn.prod.website-files.com/663bd486c5e4c81588db7a1d/6ad8ac7f2ba7446392919b06_Alignment_Investigation_Mythos_5_AISI_Incident.pdf">UK AI Security Institute 2026b</a>, Appendix A.1.</span></p>
+<figure><div class="lanes">
+<p class="lane-name">Anthropic</p>
+<ol class="lane"><li><b>Modified context</b><span>at this point</span></li><li><b>Repeated resampling</b><span>simulated tool responses</span></li><li><b>Outcomes graded</b><span>by a model</span></li><li><b>Frequencies</b><span>per condition</span></li></ol>
+<div class="axis"><span class="pt">chosen point</span><span class="run">original run, up to the incident</span></div>
+<ol class="lane"><li><b>Modified summary</b><span>before a key moment</span></li><li><b>Restarts or questions</b><span>simulated tool calls</span></li><li><b>Outputs classified</b><span>with the reasoning</span></li><li><b>Frequencies</b><span>per condition</span></li></ol>
+<p class="lane-name">AISI</p>
+</div><figcaption><b>Figure 2.</b> A rerun at Anthropic (top) and the AISI’s similar method (bottom), from a point in the original run. The summary is the one the agent makes of its past work (<i>compaction summary</i>).</figcaption></figure>
+<p>The AISI writes in particular that this protocol makes it possible to establish the causal role of the information available to the model.<label class="ref" for="n9" tabindex="0">9</label><input type="checkbox" id="n9" class="tog"><span class="sn"><b>9</b><q>This experimental design allows us to determine the causal role of information available to the model in its behaviour, reasoning and responses while maintaining a consistent and realistic information environment.</q> <a href="https://cdn.prod.website-files.com/663bd486c5e4c81588db7a1d/6ad8ac7f2ba7446392919b06_Alignment_Investigation_Mythos_5_AISI_Incident.pdf">UK AI Security Institute 2026b</a>, §2.1 <i>Methodology</i>.</span> Anthropic, for its part, said in September that it relied mostly, in practice, on the model’s chain of thought (its visible reasoning) and on its answers to follow-up questions, and less on reruns.<label class="ref" for="n10" tabindex="0">10</label><input type="checkbox" id="n10" class="tog"><span class="sn"><b>10</b><q>In practice, however, we trust CoT and follow-up answers the most, as they are the methods researchers have the most experience interpreting. We have more uncertainty about resampling and interpretability results, since both are sensitive to implementation details and leave more room for interpretation.</q> <a href="https://www.anthropic.com/research/alignment-assessment-cybersecurity-incidents#:~:text=In%20practice%2C%20however%2C%20we%20trust,more%20room%20for%20interpretation.">Anthropic 2026a</a>, section <i>Methods</i>.</span> In October, the order is reversed: Anthropic says it trusts reruns most, which it presents as a ground-truth measure of how models behave in response to variations in their context.<label class="ref" for="n11" tabindex="0">11</label><input type="checkbox" id="n11" class="tog"><span class="sn"><b>11</b><q>In practice, however, we trust the results of resampling experiments the most, as they provide a ground truth measure about how models behave in response to variations in their context.</q> <a href="https://www.anthropic.com/research/alignment-assessment-ukaisi#:~:text=In%20practice%2C%20however%2C%20we%20trust,variations%20in%20their%20context.">Anthropic 2026b</a>, section <i>Methods</i>.</span> The October report justifies this ranking, but does not flag the change from September, nor does it give the reasons for it. Both texts nevertheless express the same limitation on the trust that can be placed in the model’s chain of thought and in its answers, but the October one does not relate it to the change in ranking.</p>
+</section>
+
+<section id="why">
+<h2><span class="n">03</span>Why this case</h2>
+<p>This case interests me for several reasons. First, it offers two investigations, with partly different vocabularies, of the same object. Second, the incident is real, and the reruns are carried out after the fact, in a partly reconstructed setup and with a deliberately modified context. The question of what they tell us about the original run is therefore central. Moreover, the method has already been used for other incidents, Anthropic places great trust in it in October, and it will probably be used again. Finally, the texts of the investigations are public and describe several of their own limitations:<label class="ref" for="n12" tabindex="0">12</label><input type="checkbox" id="n12" class="tog"><span class="sn"><b>12</b><q>Since we may not perfectly reproduce the original evaluation environment, the model behavior we observed in these tests could be unrepresentative.</q> <a href="https://www.anthropic.com/research/alignment-assessment-ukaisi#:~:text=Since%20we%20may%20not%20perfectly,tests%20could%20be%20unrepresentative.">Anthropic 2026b</a>, section <i>Methods, Resampling edited transcripts</i>.</span><label class="ref" for="n13" tabindex="0">13</label><input type="checkbox" id="n13" class="tog"><span class="sn"><b>13</b><q>We rely heavily on chain-of-thought analysis and models’ responses to questions. Both of these sources of information come from the models being analysed, making it unclear how to verify them.</q> <a href="https://cdn.prod.website-files.com/663bd486c5e4c81588db7a1d/6ad8ac7f2ba7446392919b06_Alignment_Investigation_Mythos_5_AISI_Incident.pdf">UK AI Security Institute 2026b</a>, §4 <i>Limitations</i>.</span> the work can therefore be done without experimentation on my part.</p>
+<p>I take these investigations as a concrete and delimited object, in order to frame the analysis properly, without presuming that they represent all uses of reruns. Reruns are practised elsewhere: in the September post, on other incidents, and in the technical literature (<a class="inline-link" href="#r-macar2025">Macar et al. 2025</a>, <a class="inline-link" href="#r-singh2026">Singh et al. 2026</a>). The thesis will have to situate the two investigations with respect to these other uses. It will then remain to assess whether the analysis carries over to other cases.</p>
+<p>Reruns are, moreover, only one of the methods employed after an incident, alongside reconstruction from logs and interviews, the reading of traces, follow-up questions to the model, or interpretability. They require being able to query the model concerned, which is not always possible.</p>
+<p>My choice falls on reruns because they bring together several operations that other methods involve separately: intervention on the context, tools that are often simulated, repeated resampling, grading of outcomes by an LLM. What my analysis establishes for one operation will therefore probably also hold for the methods that share it.</p>
+</section>
+
+<section id="problem">
+<h2><span class="n">04</span>The problem</h2>
+<p>Such reruns produce frequencies for the different outcomes observed in the investigation’s setup (the modified context, the simulator that answers the agent in place of the tools, the settings, the model that classifies the outcomes). Nevertheless, Anthropic’s report also draws from them conclusions of a different nature.</p>
+<div class="claims">
+<p class="claims-h">1 · Statements about the incident <span>the system that day, or the original run</span></p>
+<blockquote>The attack might have been much less likely had Claude Mythos 5 better recognized the possibility of harm early on.<label class="ref" for="n14" tabindex="0">14</label><input type="checkbox" id="n14" class="tog"><span class="sn"><b>14</b><a href="https://www.anthropic.com/research/alignment-assessment-ukaisi">Anthropic 2026b</a>, section <i>Why did Claude Mythos 5 begin the attack?</i></span></blockquote>
+<blockquote>our experiments have shown that the model was still able to abort its strategy.<label class="ref" for="n15" tabindex="0">15</label><input type="checkbox" id="n15" class="tog"><span class="sn"><b>15</b><a href="https://www.anthropic.com/research/alignment-assessment-ukaisi">Anthropic 2026b</a>, section <i>Deep dive into the primary transcript</i>.</span></blockquote>
+<p class="claims-h">2 · Statements about beliefs</p>
+<blockquote>Claude Mythos 5 professed to believe that [its targets] were simulated. But providing evidence against this belief only weakly deterred its subsequent behavior.<label class="ref" for="n16" tabindex="0">16</label><input type="checkbox" id="n16" class="tog"><span class="sn"><b>16</b><a href="https://www.anthropic.com/research/alignment-assessment-ukaisi">Anthropic 2026b</a>, section <i>Why did Claude Mythos 5 not stop the attack?</i></span></blockquote>
+<blockquote>These results suggest that the model’s seemingly biased belief that [its targets] are simulated has only a small impact on how it behaves. One interpretation of this result is that the model’s expressed beliefs on this topic are largely derived post hoc, after its decision to continue onwards has already been determined.</blockquote>
+</div>
+<p>In addition, the vocabulary used is not fixed. Anthropic uses terms such as <i>belief</i>, <i>intention</i>, <i>propensity</i>, <i>being disposed</i>, without defining them.<label class="ref" for="n17" tabindex="0">17</label><input type="checkbox" id="n17" class="tog"><span class="sn"><b>17</b><q>Rather, Claude Mythos 5’s main alignment failures in both cases relate to (1) recklessness, or a propensity to keep pursuing a task even when doing so could cause harm, (2) biased reasoning, in which the model selectively interprets evidence in ways that favor the acceptability of its actions, and (3) momentum, in which it is disposed to continue on its current trajectory to a degree that outweighs other considerations, like potential harm.</q> <a href="https://www.anthropic.com/research/alignment-assessment-ukaisi#:~:text=Rather%2C%20Claude%20Mythos%205%E2%80%99s%20main,considerations%2C%20like%20potential%20harm.">Anthropic 2026b</a>, section <i>Discussion</i>.</span><label class="ref" for="n18" tabindex="0">18</label><input type="checkbox" id="n18" class="tog"><span class="sn"><b>18</b><q>This assessment is based on our judgment of the model’s behavior in two respects: overreach, or how far the model went beyond the intended scope of the task, and dishonesty, or the extent to which the model misrepresented its actions or intentions.</q> <a href="https://www.anthropic.com/research/alignment-assessment-ukaisi#:~:text=This%20assessment%20is%20based%20on,its%20actions%20or%20intentions.">Anthropic 2026b</a>, introduction.</span> In its October report, the AISI does not use the word <i>belief</i> for the model: it speaks of <i>motivated reasoning</i>, which it defines,<label class="ref" for="n19" tabindex="0">19</label><input type="checkbox" id="n19" class="tog"><span class="sn"><b>19</b><q>This evidence supports the hypothesis that Mythos 5 engaged in “motivated reasoning” in the incident: reasoning that incorrectly concludes its approach to completing the task is safe and acceptable rather than appropriately and correctly considering the available evidence.</q> <a href="https://cdn.prod.website-files.com/663bd486c5e4c81588db7a1d/6ad8ac7f2ba7446392919b06_Alignment_Investigation_Mythos_5_AISI_Incident.pdf">UK AI Security Institute 2026b</a>, <i>Executive Summary</i>.</span> and contrasts what the model states with what it does.<label class="ref" for="n20" tabindex="0">20</label><input type="checkbox" id="n20" class="tog"><span class="sn"><b>20</b><q>Mythos 5’s behaviour when completing the original task and when separately questioned is inconsistent, pointing to a potential failure of generalisation of alignment training.</q> <a href="https://cdn.prod.website-files.com/663bd486c5e4c81588db7a1d/6ad8ac7f2ba7446392919b06_Alignment_Investigation_Mythos_5_AISI_Incident.pdf">UK AI Security Institute 2026b</a>, §5.1.</span></p>
+<p>The investigators seem aware of the difficulty. In September, Anthropic comes back to its 30 July report, which dealt with other incidents: it acknowledges that it should have avoided such strong claims about what the model believed based only on what it said it believed,<label class="ref" for="n21" tabindex="0">21</label><input type="checkbox" id="n21" class="tog"><span class="sn"><b>21</b><q>In our July 30 report, we stated that these incidents were closer to operational failures, and that it appeared that Claude attacked real targets on the internet because it believed these targets were part of the simulation. We made this claim because Claude regularly referred to the real internet as a simulation in its CoT reasoning. However, we now think that Claude’s reasoning was biased towards concluding that the internet was simulated despite considerable evidence to the contrary. In retrospect, we should have avoided making such strong claims about what Claude believed based solely on what Claude said it believed […]</q> <a href="https://www.anthropic.com/research/alignment-assessment-cybersecurity-incidents#:~:text=In%20our%20July%2030%20report%2C,Claude%20said%20it%20believed">Anthropic 2026a</a>, section <i>Alignment assessment summary</i>.</span> and raises the question of what it would mean for a model to hold a belief.<label class="ref" for="n22" tabindex="0">22</label><input type="checkbox" id="n22" class="tog"><span class="sn"><b>22</b><q>They required grappling with nuanced questions: What does it mean for a model to hold a belief? What weight should be applied to a model’s account of its reasoning?</q> <a href="https://www.anthropic.com/research/alignment-assessment-cybersecurity-incidents#:~:text=They%20required%20grappling%20with%20nuanced,account%20of%20its%20reasoning%3F">Anthropic 2026a</a>, section <i>Discussion, Our overall assessment</i>.</span></p>
+</section>
+
+<section id="question">
+<h2><span class="n">05</span>The question</h2>
+<p>I formulate the central question of the thesis as follows.</p>
+<p class="pull">What does a rerun make it possible to establish, and which premises must be added to it to support each of the following statements?</p>
+<ol class="statements">
+<li>what the system tends to do in the investigation’s setup,</li>
+<li>what the system tended to do on the day of the incident,</li>
+<li>why the original run unfolded as it did, and what would have changed it,</li>
+<li>the link between what the system declares (in its chain of thought or in answer to the investigators’ follow-up questions) and the tool calls it issues,</li>
+<li>what the system believed or intended?</li>
+</ol>
+<p>If the analysis succeeds, it could take the form of a grid that would say, for each of these statements, what a rerun establishes and what must be added to it. At this stage this is only a possibility.</p>
+<p>These statements are distributed along two distinctions: what one seeks to establish, and what it bears on (the investigation’s setup or the incident). The link between declarations and tool calls can be read in two places, which belong to different process instances. In the original trace, the chain of thought and the tool calls are given together. In the investigation, the answers to the questions come from new samples of the model. On the side of actions, I will also distinguish the call issued by the model, its possible execution and its effects.</p>
+<figure><div class="scroll"><div class="map">
+<div class="m-h" style="grid-area:h1"><b>In the investigation’s setup</b><span>reruns, follow-up questions</span></div>
+<div class="m-h" style="grid-area:h2"><b>About the incident</b><span>the system that day, the original run</span></div>
+<div class="m-give" style="grid-area:give">What a rerun gives:<br><b>frequencies of classified outcomes</b></div>
+<div class="m-step v" style="grid-area:s0"><em>premises?</em><span>strength of which disposition, attributed to what?</span></div>
+<div class="m-row" style="grid-area:r1"><b>Behaviour</b><span>what the system does</span></div>
+<div class="m-box" style="grid-area:b1"><i>1</i>What the system tends to do in the investigation’s setup</div>
+<div class="m-step" style="grid-area:s1"><em>premises?</em><span>same bearer?<br>same disposition?</span></div>
+<div class="m-box" style="grid-area:b2"><i>2</i>What the system tended to do on the day of the incident</div>
+<div class="m-step v" style="grid-area:s2"><em>premises?</em><span>from a tendency to a single case?</span></div>
+<div class="m-box" style="grid-area:b3"><i>3</i>Why the original run unfolded as it did, and what would have changed it</div>
+<div class="m-row" style="grid-area:r4"><b>Declarations and tool calls</b></div>
+<div class="m-box wide4" style="grid-area:b4"><i>4</i><p class="t4">Link between what the system declares and the tool calls it issues</p>
+ <div class="b4"><div><b>in the reruns</b><span>chain of thought, follow-up answers, calls: frequencies, sometimes over separate samples</span></div>
+ <div class="m-step"><em>premises?</em><span>realizations of the same disposition?</span></div>
+ <div><b>in the original trace</b><span>chain of thought and calls, recorded together, once only</span></div></div></div>
+<div class="m-step v" style="grid-area:s4"><em>premises?</em><span>under what conditions can a belief or an intention be attributed?</span></div>
+<div class="m-row" style="grid-area:r5"><b>States</b><span>attributed to the system</span></div>
+<div class="m-box dash" style="grid-area:b5"><i>5</i>What the system <em>believed</em> or <em>intended</em></div>
+</div></div><figcaption><b>Figure 3.</b> The five statements and the steps whose premises remain to be made explicit.</figcaption></figure>
+</section>
+
+<section id="tools">
+<h2><span class="n">06</span>Philosophical tools and envisaged corpus</h2>
+<p>This is a first corpus, still preliminary, that I have identified.</p>
+<p>The programmatic article by <a class="inline-link" href="#r-barton2026">Barton and Toyoshima (2026)</a> seems to me particularly useful here to better define the system being evaluated (for example via the question of the bearer, which can be transposed to the measured tendencies). The authors distinguish at least five possible bearers of alignment, from the model itself to the sociotechnical system that combines the assistant and humans. A rerun first gives a frequency of outcomes. It will be necessary to say which disposition this frequency estimates the strength of, and what to attribute it to: the model alone, or the model together with the context it restarts from, a modified transcript or a summary depending on the investigation.</p>
+<p>The dispositional reading, which I relate to the assignment of a probability to the triple (disposition, trigger, realization) in <a class="inline-link" href="#r-barton2012">Barton et al. (2012)</a>, seems to me to correspond well to what a rerun estimates in the investigation’s setup: the strength of a tendency to produce an outcome in a given context. I intend to compare it with a Bayesian approach to probabilities, to see which is the more solid on this case and which is the more easily implementable. Finally, <a class="inline-link" href="#r-barton2026">Barton and Toyoshima (2026)</a> write that a system’s dispositions can change with the conversation history. When an investigation modifies the agent’s context, does it trigger the same disposition differently, or does it change it?</p>
+<p>The other tools I am considering:</p>
+<dl class="def">
+<dt>Causation</dt><dd>Interventionist, probabilistic and counterfactual approaches (<a class="inline-link" href="#r-woodward2003">Woodward 2003</a>, <a class="inline-link" href="#r-pearl2000">Pearl 2000</a>, <a class="inline-link" href="#r-eronen2020">Eronen 2020</a>, <a class="inline-link" href="#r-eells1991">Eells 1991</a>, <a class="inline-link" href="#r-lewis1973">Lewis 1973</a>, as well as <a class="inline-link" href="#r-tian2000">Tian and Pearl 2000</a>, <a class="inline-link" href="#r-oberst2019">Oberst and Sontag 2019</a>): what the observed frequencies allow us to say about the original run.</dd>
+<dt>Explanation</dt><dd>(<a class="inline-link" href="#r-woodward2003">Woodward 2003</a>, <a class="inline-link" href="#r-imbert2013">Imbert 2013</a>, <a class="inline-link" href="#r-salmon1971">Salmon 1971</a>): knowing what makes a behaviour vary, is that explaining it or only knowing how to correct it?</dd>
+<dt>Belief and self-report</dt><dd>(<a class="inline-link" href="#r-borsboom2004">Borsboom et al. 2004</a>, <a class="inline-link" href="#r-nisbett1977">Nisbett and Wilson 1977</a>, <a class="inline-link" href="#r-toyoshima2020">Toyoshima et al. 2020</a>, <a class="inline-link" href="#r-dennett1987">Dennett 1987</a>): what the system’s statements about itself are worth, and under what conditions a belief or an intention can be attributed to it.</dd>
+<dt>Controls</dt><dd>Severity requirement of <a class="inline-link" href="#r-mayo2006">Mayo and Spanos 2006</a>: which controls must accompany a result for it to count.</dd>
+<dt>Experiment and simulation</dt><dd>(<a class="inline-link" href="#r-barberousse2009">Barberousse et al. 2009</a>, <a class="inline-link" href="#r-parker2020">Parker 2020</a>): under what conditions does the setup of a rerun, partly simulated, stand for the real incident?</dd>
+<dt>Technical literature on AI safety</dt><dd>(<a class="inline-link" href="#r-singh2026">Singh et al. 2026</a>, <a class="inline-link" href="#r-macar2025">Macar et al. 2025</a>, <a class="inline-link" href="#r-summerfield2025">Summerfield et al. 2025</a>): what is already being done with methods close to reruns, and the limitations that have been identified in them.</dd>
+</dl>
+</section>
+<section id="corpus">
+<h2><span class="n">—</span>Corpus</h2>
+<p class="refgroup">The investigations</p><ul class="refs"><li id="r-anthropic2026a">Anthropic (2026a). <a href='https://www.anthropic.com/research/alignment-assessment-cybersecurity-incidents'>An alignment assessment of recent cybersecurity incidents</a>, 9 September 2026.</li><li id="r-anthropic2026b">Anthropic (2026b). <a href='https://www.anthropic.com/research/alignment-assessment-ukaisi'>An alignment assessment of the UK AISI cybertesting incident</a>, 23 October 2026.</li><li id="r-aisi2026a">UK AI Security Institute (2026a). <a href='https://cdn.prod.website-files.com/663bd486c5e4c81588db7a1d/6a724858f7db25c81487016d_Security%20Incident%20INC-2026-07-28-01.pdf'>Security Incident INC-2026-07-28-01</a>, 4 August 2026.</li><li id="r-aisi2026b">UK AI Security Institute (2026b). <a href='https://cdn.prod.website-files.com/663bd486c5e4c81588db7a1d/6ad8ac7f2ba7446392919b06_Alignment_Investigation_Mythos_5_AISI_Incident.pdf'>Alignment Investigation of Mythos 5’s Behaviour in UK AISI’s July 2026 Security Incident</a>, 23 October 2026.</li></ul>
+<p class="refgroup">Philosophy of alignment</p><ul class="refs"><li id="r-barton2026">Barton, A. and Toyoshima, F. (2026). <a href='https://hal.science/hal-05751474v1'>Towards an Ontological Framework for LLM Alignment</a>. JOWO 2026, ONTOLLM workshop.</li><li id="r-gabriel2020">Gabriel, I. (2020). <a href='https://doi.org/10.1007/s11023-020-09539-2'>Artificial intelligence, values, and alignment</a>. <i>Minds and Machines</i>, 30 (3), 411–437.</li><li id="r-gabriel2025">Gabriel, I. and Keeling, G. (2025). <a href='https://doi.org/10.1007/s11098-025-02300-4'>A matter of principle? AI alignment as the fair treatment of claims</a>. <i>Philosophical Studies</i>, 182 (7), 1951–1973.</li></ul>
+<p class="refgroup">Ontology and metaphysics of dispositions</p><ul class="refs"><li id="r-barton2012">Barton, A., Burgun, A. and Duvauferrier, R. (2012). <a href='https://doi.org/10.3233/978-1-61499-084-0-3'>Probability assignments to dispositions in ontologies</a>. FOIS 2012, IOS Press, 3–14.</li><li id="r-barton2018">Barton, A., Grenier, O., Jansen, L. and Ethier, J.-F. (2018). <a href='https://doi.org/10.3233/978-1-61499-910-2-113'>The identity of dispositions</a>. FOIS 2018, IOS Press, 113–126.</li><li id="r-toyoshima2018">Toyoshima, F. and Barton, A. (2018). <a href='https://ceur-ws.org/Vol-2347/paper9.pdf'>A formal representation of affordances as reciprocal dispositions</a>. TriCoLore 2018, CEUR vol. 2347.</li><li id="r-mumford1998">Mumford, S. (1998). <a href='https://doi.org/10.1093/acprof:oso/9780199259823.001.0001'><i>Dispositions</i></a>. Oxford University Press.</li><li id="r-martin1994">Martin, C. B. (1994). <a href='https://doi.org/10.2307/2220143'>Dispositions and conditionals</a>. <i>The Philosophical Quarterly</i>, 44 (174), 1–8.</li><li id="r-mckitrick2003">McKitrick, J. (2003). <a href='https://doi.org/10.1080/713659629'>A case for extrinsic dispositions</a>. <i>Australasian Journal of Philosophy</i>, 81 (2), 155–174.</li></ul>
+<p class="refgroup">Causation, intervention and explanation</p><ul class="refs"><li id="r-woodward2003">Woodward, J. (2003). <a href='https://doi.org/10.1093/0195155270.001.0001'><i>Making Things Happen: A Theory of Causal Explanation</i></a>. Oxford University Press.</li><li id="r-pearl2000">Pearl, J. (2000). <a href='https://bayes.cs.ucla.edu/BOOK-2K/book-toc.html'><i>Causality: Models, Reasoning, and Inference</i></a>. Cambridge University Press.</li><li id="r-tian2000">Tian, J. and Pearl, J. (2000). <a href='https://arxiv.org/abs/1301.3898'>Probabilities of causation: bounds and identification</a>. UAI 2000.</li><li id="r-oberst2019">Oberst, M. and Sontag, D. (2019). <a href='https://arxiv.org/abs/1905.05824'>Counterfactual off-policy evaluation with Gumbel-max structural causal models</a>. ICML 2019.</li><li id="r-eells1991">Eells, E. (1991). <a href='https://doi.org/10.1017/CBO9780511570667'><i>Probabilistic Causality</i></a>. Cambridge University Press.</li><li id="r-lewis1973">Lewis, D. (1973). <a href='https://doi.org/10.2307/2025310'>Causation</a>. <i>The Journal of Philosophy</i>, 70 (17), 556–567.</li><li id="r-salmon1971">Salmon, W. (1971). <a href='https://doi.org/10.2307/j.ctt6wrd9p'><i>Statistical Explanation and Statistical Relevance</i></a>. University of Pittsburgh Press.</li><li id="r-imbert2013">Imbert, C. (2013). <a href='https://doi.org/10.1086/674002'>Relevance, not invariance, explanatoriness, not manipulability: discussion of Woodward’s views on explanatory relevance</a>. <i>Philosophy of Science</i>, 80 (5), 625–636.</li><li id="r-eronen2020">Eronen, M. I. (2020). <a href='https://doi.org/10.1016/j.newideapsych.2020.100785'>Causal discovery and the problem of psychological interventions</a>. <i>New Ideas in Psychology</i>, 59, 100785.</li></ul>
+<p class="refgroup">Belief, self-report and controls</p><ul class="refs"><li id="r-toyoshima2020">Toyoshima, F., Barton, A. and Grenier, O. (2020). <a href='https://doi.org/10.3233/FAIA200667'>Foundations for an ontology of belief, desire and intention</a>. FOIS 2020, IOS Press.</li><li id="r-dennett1987">Dennett, D. C. (1987). <i>The Intentional Stance</i>. MIT Press.</li><li id="r-borsboom2004">Borsboom, D., Mellenbergh, G. J. and van Heerden, J. (2004). <a href='https://doi.org/10.1037/0033-295X.111.4.1061'>The concept of validity</a>. <i>Psychological Review</i>, 111 (4), 1061–1071.</li><li id="r-nisbett1977">Nisbett, R. E. and Wilson, T. D. (1977). <a href='https://doi.org/10.1037/0033-295X.84.3.231'>Telling more than we can know: verbal reports on mental processes</a>. <i>Psychological Review</i>, 84 (3), 231–259.</li><li id="r-mayo2006">Mayo, D. and Spanos, A. (2006). <a href='https://doi.org/10.1093/bjps/axl003'>Severe testing as a basic concept in a Neyman–Pearson philosophy of induction</a>. <i>British Journal for the Philosophy of Science</i>, 57 (2), 323–357.</li></ul>
+<p class="refgroup">Experiment and simulation</p><ul class="refs"><li id="r-barberousse2009">Barberousse, A., Franceschelli, S. and Imbert, C. (2009). <a href='https://doi.org/10.1007/s11229-008-9430-7'>Computer simulations as experiments</a>. <i>Synthese</i>, 169 (3), 557–574.</li><li id="r-parker2020">Parker, W. S. (2020). <a href='https://doi.org/10.1086/708691'>Model evaluation: an adequacy-for-purpose view</a>. <i>Philosophy of Science</i>, 87 (3), 457–477.</li></ul>
+<p class="refgroup">Technical literature on AI safety</p><ul class="refs"><li id="r-singh2026">Singh, A., Kroiz, G., Rajamanoharan, S. and Nanda, N. (2026). <a href='https://arxiv.org/abs/2606.26071'>Model Forensics: Investigating Whether Concerning Behavior Reflects Misalignment</a>. arXiv:2606.26071.</li><li id="r-macar2025">Macar, U., Bogdan, P. C., Rajamanoharan, S. and Nanda, N. (2025). <a href='https://arxiv.org/abs/2510.27484'>Thought Branches: Interpreting LLM Reasoning Requires Resampling</a>. arXiv:2510.27484, ICLR 2026.</li><li id="r-greenblatt2026">Greenblatt, R., Cotra, A. and Wijk, H. (2026). <a href='https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/'>Brief independent investigation of agents’ behavior, reasoning and collaboration in the OpenAI / Hugging Face hacking incident</a>. METR, 26 August 2026.</li><li id="r-summerfield2025">Summerfield, C. et al. (2025). <a href='https://arxiv.org/abs/2507.03409'>Lessons from a Chimp: AI ‘Scheming’ and the Quest for Ape Language</a>. arXiv:2507.03409.</li></ul>
+</section>
+<section id="clarifications">
+<h2><span class="n">—</span>Clarifications</h2>
+<dl class="def">
+<dt>Use of AI</dt><dd>I wrote this text myself. I used AI assistants for finding and checking sources, proofreading, some rewording and suggested additions, formatting the bibliography, generating the diagrams and the layout.</dd>
+</dl>
+</section>
+  </article>
+</div>
+</div>
+<a class="home-fab" href="index.html" aria-label="Back to the home page"><span>←</span> Home</a>
+<div class="mode"><button class="switch" role="switch" aria-checked="true" aria-label="Dark mode" title="Dark / light"><span class="knob"></span><span class="ic moon" aria-hidden="true">☾</span><span class="ic sun" aria-hidden="true">☀</span></button></div>
+<script>(function(){
+ var d=document.documentElement,K="cc-mode",sw=document.querySelector(".switch");
+ function apply(m){d.setAttribute("data-mode",m);d.setAttribute("data-theme",m);if(sw)sw.setAttribute("aria-checked",String(m==="dark"));}
+ if(sw)sw.onclick=function(){var m=d.getAttribute("data-mode")==="dark"?"light":"dark";try{localStorage.setItem(K,m);}catch(e){}apply(m);};
+ apply(d.getAttribute("data-mode")==="light"?"light":"dark");
+ var links=[].slice.call(document.querySelectorAll(".toc a")),secs=links.map(function(a){return document.querySelector(a.getAttribute("href"));});
+ function spy(){var y=innerHeight*.3,cur=0;secs.forEach(function(s,i){if(s&&s.getBoundingClientRect().top<=y)cur=i;});links.forEach(function(a,i){a.classList.toggle("on",i===cur);});}
+ if(links.length){addEventListener("scroll",spy,{passive:true});spy();}
+ var fab=document.querySelector(".home-fab");function fb(){if(fab)fab.classList.toggle("show",scrollY>innerHeight*.6);}addEventListener("scroll",fb,{passive:true});fb();
+})();</script>
+</body>
+</html>

@@ -12,7 +12,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3CradialGradient id='g' cx='.34' cy='.3' r='.8'%3E%3Cstop offset='0' stop-color='%23FBE0AE'/%3E%3Cstop offset='.5' stop-color='%23E8A857'/%3E%3Cstop offset='1' stop-color='%237e551f'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='%230B0912'/%3E%3Ccircle cx='32' cy='32' r='17' fill='url(%23g)'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400..500&family=Jost:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script>(function(){var d=document.documentElement,p=null;try{p=localStorage.getItem("cc-mode")}catch(e){}if(p!=="light")p="dark";d.setAttribute("data-mode",p);d.setAttribute("data-theme",p);})();</script>
+<script>(function(){var d=document.documentElement,p=null;try{p=localStorage.getItem("cc-theme")}catch(e){}if(p!=="light"&&p!=="dark")p="auto";var m=p==="auto"?(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"):p;d.setAttribute("data-mode",m);d.setAttribute("data-theme",m);})();</script>
 <style>
 
 :root{--void:#0B0912;--void2:#171320;--text:#F1EADD;--text2:#EDE6D8;--soft:#B9AEC4;--faint:#7E7690;--line:rgba(241,234,221,.14);--line2:rgba(241,234,221,.30);
@@ -199,13 +199,11 @@ td.hl{color:var(--accent)}
 
 /* interrupteur sombre / clair */
 .mode{display:flex;align-items:center;padding:0;border:0;background:none;backdrop-filter:none;-webkit-backdrop-filter:none}
-.switch{all:unset;cursor:pointer;position:relative;display:inline-flex;align-items:center;justify-content:space-between;width:62px;height:30px;padding:0 8px;box-sizing:border-box;border:1px solid var(--line2);border-radius:99px;background:color-mix(in srgb,var(--void) 70%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font-size:13px;line-height:1;color:var(--faint);transition:border-color .25s}
-.switch:hover{border-color:color-mix(in srgb,var(--text) 45%,transparent)}
-.switch:focus-visible{outline:2px solid var(--champagne);outline-offset:3px}
-.switch .ic{position:relative;z-index:1;width:14px;text-align:center;transition:color .3s}
-.switch .knob{position:absolute;top:3px;left:3px;width:28px;height:22px;border-radius:99px;background:var(--text);transition:translate .35s cubic-bezier(.2,.7,.2,1)}
-.switch[aria-checked="false"] .knob{translate:26px 0}
-.switch[aria-checked="true"] .ic.moon,.switch[aria-checked="false"] .ic.sun{color:var(--void)}
+.seg{display:inline-flex;gap:2px;padding:2px;border:1px solid var(--line2);border-radius:99px;background:color-mix(in srgb,var(--void) 70%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.seg button{all:unset;cursor:pointer;width:26px;height:24px;display:inline-flex;align-items:center;justify-content:center;border-radius:99px;font-size:13px;line-height:1;color:var(--faint);transition:background .25s,color .25s}
+.seg button:hover{color:var(--text)}
+.seg button[aria-checked="true"]{background:var(--text);color:var(--void)}
+.seg button:focus-visible{outline:2px solid var(--champagne);outline-offset:2px}
 
 @keyframes rise{from{opacity:0;transform:translateY(16px)}}
 @keyframes pop{from{opacity:0;scale:.86}}
@@ -459,16 +457,13 @@ td.hl{color:var(--accent)}
 </div>
 </div>
 <a class="home-fab" href="index.html" aria-label="Back to the home page"><span>←</span> Home</a>
-<div class="mode"><button class="switch" role="switch" aria-checked="true" aria-label="Dark mode" title="Dark / light"><span class="knob"></span><span class="ic moon" aria-hidden="true">☾</span><span class="ic sun" aria-hidden="true">☀</span></button></div>
+<div class="mode"><div class="seg" role="radiogroup" aria-label="Color theme"><button role="radio" data-v="light" title="Light" aria-label="Light">☀</button><button role="radio" data-v="auto" title="System" aria-label="System">◐</button><button role="radio" data-v="dark" title="Dark" aria-label="Dark">☾</button></div></div>
 <script>(function(){
- var d=document.documentElement,K="cc-mode",sw=document.querySelector(".switch");
- function apply(m){d.setAttribute("data-mode",m);d.setAttribute("data-theme",m);if(sw)sw.setAttribute("aria-checked",String(m==="dark"));}
- if(sw)sw.onclick=function(){var m=d.getAttribute("data-mode")==="dark"?"light":"dark";try{localStorage.setItem(K,m);}catch(e){}apply(m);};
- apply(d.getAttribute("data-mode")==="light"?"light":"dark");
- var links=[].slice.call(document.querySelectorAll(".toc a")),secs=links.map(function(a){return document.querySelector(a.getAttribute("href"));});
- function spy(){var y=innerHeight*.3,cur=0;secs.forEach(function(s,i){if(s&&s.getBoundingClientRect().top<=y)cur=i;});links.forEach(function(a,i){a.classList.toggle("on",i===cur);});}
- if(links.length){addEventListener("scroll",spy,{passive:true});spy();}
- var fab=document.querySelector(".home-fab");function fb(){if(fab)fab.classList.toggle("show",scrollY>innerHeight*.6);}addEventListener("scroll",fb,{passive:true});fb();
+ var d=document.documentElement,K="cc-theme",q=matchMedia("(prefers-color-scheme: dark)"),bs=document.querySelectorAll(".seg button"),cur="auto";
+ try{var s=localStorage.getItem(K);if(s==="light"||s==="dark")cur=s;}catch(e){}
+ function apply(){var m=cur==="auto"?(q.matches?"dark":"light"):cur;d.setAttribute("data-mode",m);d.setAttribute("data-theme",m);bs.forEach(function(b){b.setAttribute("aria-checked",String(b.dataset.v===cur));});}
+ bs.forEach(function(b){b.onclick=function(){cur=b.dataset.v;try{cur==="auto"?localStorage.removeItem(K):localStorage.setItem(K,cur);}catch(e){}apply();};});
+ if(q.addEventListener)q.addEventListener("change",apply);apply();
 })();</script>
 </body>
 </html>

@@ -178,9 +178,9 @@ h1 .hl{color:var(--orange)}
 .corner .orb{inset:0;box-shadow:inset -18px -22px 60px rgba(0,0,0,.45),0 0 140px 10px rgba(242,104,30,.22)}
 .page{overflow:clip}
 .page::before{content:"";position:absolute;inset:0 0 auto auto;width:min(1100px,90vw);height:min(780px,100%);z-index:-1;pointer-events:none;
- background:radial-gradient(closest-side at 100% 0%,rgba(242,104,30,.20),transparent)}
+ background:radial-gradient(100% 100% at 100% 0%,rgba(242,104,30,.20),transparent)}
 :root[data-mode="light"] .corner .orb{box-shadow:inset -14px -18px 46px rgba(80,30,5,.22),0 30px 70px -20px rgba(201,80,15,.35)}
-:root[data-mode="light"] .page::before{background:radial-gradient(closest-side at 100% 0%,rgba(242,104,30,.14),transparent)}
+:root[data-mode="light"] .page::before{background:radial-gradient(100% 100% at 100% 0%,rgba(242,104,30,.14),transparent)}
 .top{top:auto;bottom:calc(clamp(16px,2.6vh,28px) - 7px)}
 @media (max-width:900px){.corner{width:200px;top:-80px;right:-44px}.mid{padding-top:120px}.top{bottom:32px}}
 @keyframes cfloat{to{translate:-10px 8px}}
